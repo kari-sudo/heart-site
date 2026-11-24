@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Для тебя</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main id="stage" aria-label="Сердце из текста"></main>
+
+  <section id="finalScreen" class="final-screen" aria-hidden="true">
+    <div id="mainPhrase" class="main-phrase"></div>
+    <button id="letterBtn" class="letter-btn">Открыть послание</button>
+  </section>
+
+  <div id="letterOverlay" class="letter-overlay" aria-hidden="true">
+    <article class="letter">
+      <h1 id="letterTitle">Послание для тебя</h1>
+      <p id="letterText"></p>
+      <button id="closeLetter" class="close-letter">Закрыть</button>
+    </article>
+  </div>
+
+  <button id="settingsBtn" class="corner-button" aria-label="Настройки" title="Настройки">⚙</button>
+  <button id="restartBtn" class="corner-button restart-button" aria-label="Повторить" title="Показать сердце снова">↻</button>
+
+  <aside id="panel" class="panel" aria-hidden="true">
+    <div class="panel-heading">
+      <span>Настройки</span>
+      <button id="closePanel" class="close-panel" aria-label="Закрыть">×</button>
+    </div>
+
+    <label class="field">
+      <span>Фразы: одна фраза на строку</span>
+      <textarea id="textsInput" rows="8"></textarea>
+    </label>
+
+    <div class="button-row">
+      <button id="applyBtn" class="control-button primary">Применить</button>
+      <button id="resetTextBtn" class="control-button">Исходный текст</button>
+    </div>
+
+    <label class="field">Размер текста <span id="fontSizeVal"></span>
+      <input id="fontSize" type="range" min="8" max="26" step="1">
+    </label>
+    <label class="field">Скорость анимации <span id="speedVal"></span>
+      <input id="speed" type="range" min="0.3" max="3" step="0.1">
+    </label>
+    <label class="field">Плотность фраз <span id="densityVal"></span>
+      <input id="density" type="range" min="0.6" max="1.6" step="0.05">
+    </label>
+    <label class="field">Размер сердца <span id="heartSizeVal"></span>
+      <input id="heartSize" type="range" min="0.5" max="1.1" step="0.02">
+    </label>
+    <label class="field">Цвет текста
+      <input id="color" type="color">
+    </label>
+
+    <button id="resetSettingsBtn" class="control-button">Сбросить настройки</button>
+  </aside>
+
+  <script src="texts.js"></script>
+  <script src="settings.js"></script>
+  <script src="heart.js"></script>
+  <script src="personal.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,396 @@
+:root {
+  --bg: #000;
+  --text: #ff3028;
+  --font-size: 14px;
+  --speed: 1;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+#stage {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  cursor: pointer;
+  transition: opacity .65s ease, transform .65s ease;
+}
+
+#stage.stage-fade {
+  opacity: 0;
+  transform: scale(.88);
+  pointer-events: none;
+}
+
+.word {
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--text);
+  white-space: nowrap;
+  font-size: var(--font-size);
+  font-weight: 500;
+  line-height: 1;
+  opacity: 0;
+  will-change: transform, opacity;
+  transform: translate3d(var(--x), var(--y), 0) scale(var(--s, 1));
+  transition:
+    transform calc(1.6s / var(--speed)) cubic-bezier(.22,.9,.3,1),
+    opacity calc(1.2s / var(--speed)) ease;
+  transition-delay: var(--delay, 0s);
+}
+
+.word.placed {
+  opacity: .94;
+}
+
+.word.settled {
+  transition: transform .3s ease, opacity .3s ease, filter .3s ease;
+  transition-delay: 0s;
+}
+
+.word.settled:hover {
+  --s: 1.25;
+  opacity: 1;
+  filter: drop-shadow(0 0 7px var(--text));
+  z-index: 5;
+}
+
+/* Надпись и кнопка показываются после клика по сердцу */
+.final-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  padding: 24px;
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .7s ease, visibility .7s ease;
+}
+
+.final-screen.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+.main-phrase {
+  max-width: 760px;
+  color: #ff514b;
+  font-size: clamp(25px, 4vw, 42px);
+  font-weight: 500;
+  line-height: 1.5;
+  text-shadow: 0 0 18px rgba(255, 48, 40, .55);
+  white-space: pre-line;
+}
+
+.letter-btn {
+  padding: 14px 25px;
+  border: 1px solid rgba(255, 48, 40, .65);
+  border-radius: 30px;
+  background: #160504;
+  color: #ff625c;
+  font: 500 14px Inter, Arial, sans-serif;
+  letter-spacing: .04em;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(255, 48, 40, .12);
+  transition: background .2s, box-shadow .2s, transform .2s;
+}
+
+.letter-btn:hover {
+  background: #2a0907;
+  box-shadow: 0 0 25px rgba(255, 48, 40, .3);
+  transform: translateY(-2px);
+}
+
+/* Письмо */
+.letter-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, .82);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .25s ease, visibility .25s ease;
+}
+
+.letter-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.letter {
+  width: min(500px, 100%);
+  padding: 34px 28px;
+  border: 1px solid rgba(255, 48, 40, .35);
+  border-radius: 14px;
+  background: #0b0808;
+  text-align: center;
+  box-shadow: 0 0 50px rgba(255, 48, 40, .12);
+}
+
+.letter h1 {
+  margin-bottom: 20px;
+  color: #ff514b;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.letter p {
+  margin-bottom: 24px;
+  color: #f1dedd;
+  font-size: 16px;
+  line-height: 1.8;
+  white-space: pre-line;
+}
+
+.close-letter {
+  padding: 9px 20px;
+  border: 1px solid #55302e;
+  border-radius: 20px;
+  background: transparent;
+  color: #d9b8b6;
+  cursor: pointer;
+}
+
+/* Кнопки в углу */
+.corner-button {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 15;
+  width: 40px;
+  height: 40px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font-size: 21px;
+  opacity: .45;
+  cursor: pointer;
+}
+
+.corner-button:hover {
+  opacity: 1;
+}
+
+.restart-button {
+  right: 58px;
+}
+
+/* Панель настроек */
+.panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  gap: 17px;
+  width: min(370px, 100%);
+  height: 100%;
+  padding: 20px;
+  overflow-y: auto;
+  background: #0b0b0b;
+  border-left: 1px solid #32110f;
+  color: #ddd;
+  transform: translateX(100%);
+  transition: transform .3s ease;
+}
+
+.panel.open {
+  transform: translateX(0);
+}
+
+.panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text);
+  font-size: 16px;
+}
+
+.close-panel {
+  border: 0;
+  background: none;
+  color: #ddd;
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #bbb;
+  font-size: 13px;
+}
+
+.field span {
+  color: var(--text);
+}
+
+textarea {
+  width: 100%;
+  min-height: 150px;
+  padding: 10px;
+  resize: vertical;
+  border: 1px solid #333;
+  border-radius: 6px;
+  background: #111;
+  color: #fff;
+  font: 13px/1.5 Inter, Arial, sans-serif;
+}
+
+input[type="range"] {
+  width: 100%;
+  accent-color: var(--text);
+}
+
+input[type="color"] {
+  width: 48px;
+  height: 32px;
+  border: 0;
+  background: transparent;
+}
+
+.button-row {
+  display: flex;
+  gap: 8px;
+}
+
+.control-button {
+  padding: 10px 12px;
+  border: 1px solid #333;
+  border-radius: 7px;
+  background: #171717;
+  color: #eee;
+  font: 13px Inter, Arial, sans-serif;
+  cursor: pointer;
+}
+
+.control-button.primary {
+  border-color: var(--text);
+  background: var(--text);
+  color: #000;
+}
+
+@media (max-width: 600px) {
+  .main-phrase {
+    font-size: clamp(23px, 7vw, 32px);
+  }
+
+  .final-screen {
+    gap: 25px;
+  }
+
+  .letter {
+    padding: 28px 20px;
+  }
+}
+/* Дополнительная адаптация для всех устройств */
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  overscroll-behavior: none;
+}
+
+#stage {
+  touch-action: none;
+}
+
+.main-phrase {
+  font-size: clamp(21px, 5.5vw, 40px);
+  line-height: 1.5;
+}
+
+.letter-btn {
+  max-width: 100%;
+  white-space: normal;
+}
+
+.letter {
+  max-height: 88vh;
+  overflow-y: auto;
+}
+
+@media (max-width: 900px) {
+  .main-phrase {
+    max-width: 92vw;
+  }
+
+  .final-screen {
+    gap: 26px;
+    padding: 22px;
+  }
+}
+
+@media (max-width: 600px) {
+  .corner-button {
+    width: 38px;
+    height: 38px;
+    right: 10px;
+    bottom: 10px;
+  }
+
+  .restart-button {
+    right: 50px;
+  }
+
+  .panel {
+    width: 100%;
+    padding: 18px;
+  }
+
+  .main-phrase {
+    max-width: 94vw;
+  }
+
+  .final-screen {
+    padding: 18px;
+  }
+
+  .letter {
+    padding: 26px 20px;
+  }
+
+  .letter p {
+    font-size: 15px;
+  }
+}
+
+@media (max-height: 520px) {
+  .final-screen {
+    gap: 16px;
+  }
+
+  .main-phrase {
+    font-size: clamp(18px, 5vw, 28px);
+  }
+
+  .letter-btn {
+    padding: 11px 20px;
+  }
+}
